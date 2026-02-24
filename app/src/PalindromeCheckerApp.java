@@ -1,18 +1,18 @@
 /**
- * MAIN CLASS UseCase4PalindromeCheckerApp
- Use Case 4: Character Array Based Validation
- * Description:
- This class validates a palindrome by converting
- the string into a character array and comparing
- * characters using the two-pointer technique.
+
+MAIN CLASS UseCase5Palindrome CheckerApp
+Use Case 5: Stack Based Palindrome Checker
+Description:
+This class validates a palindrome using a Stack
+*data structure which follows the LIFO principle.
  At this stage, the application:
- Converts string to char array
- * - Uses start and end pointers
- Compares characters efficiently
- * Displays the result
- * This reduces extra memory usage.
- @author Developer
- @version 4.0
+Pushes characters into a stack
+Pops them in reverse order
+Compares with original sequence
+Displays the result
+This maps stack behavior to reversal logic.
+@author PranavSRM
+@version 5.0
 
  **/
 import java .util.*;
@@ -21,34 +21,34 @@ public class PalindromeCheckerApp {
      * Application entry point for UC3.
      * @param args Command-line arguments
      */
-    public static boolean isPalindrome(String str) {
-        // Step 1: Convert string to char[]
-        char[] charArray = str.toCharArray();
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a string: ");
+        String input = scanner.nextLine();
 
-        // Step 2: Use two-pointer approach
-        int start = 0;
-        int end = charArray.length - 1;
+        // Standardize input (optional but recommended for mixed-case)
+        String standardizedInput = input.toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
 
-        // Step 3: Compare start & end characters
-        while (start < end) {
-            if (charArray[start] != charArray[end]) {
-                return false; // Mismatch found, not a palindrome
-            }
-            start++; // Move front pointer forward
-            end--;   // Move back pointer backward
+        Stack<Character> stack = new Stack<>();
+
+        // Step 1: Push characters into stack
+        for (int i = 0; i < standardizedInput.length(); i++) {
+            stack.push(standardizedInput.charAt(i));
         }
 
-        return true; // No mismatches found
-    }
+        // Step 2: Pop and build reversed string
+        StringBuilder reversedInput = new StringBuilder();
+        while (!stack.isEmpty()) {
+            reversedInput.append(stack.pop());
+        }
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner (System.in);
-        System.out.println("Input Text: ");
-        String input = sc.next();
+        // Step 3: Print result
+        if (standardizedInput.equals(reversedInput.toString())) {
+            System.out.println("Result: '" + input + "' is a palindrome.");
+        } else {
+            System.out.println("Result: '" + input + "' is not a palindrome.");
+        }
 
-        // Strengthen core programming fundamentals: handle case sensitivity if needed
-        boolean result = isPalindrome(input.toLowerCase());
-
-        System.out.println("Is '" + input + "' a palindrome? " + result);
+        scanner.close();
     }
 }
