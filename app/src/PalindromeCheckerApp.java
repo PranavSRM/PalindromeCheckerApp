@@ -1,20 +1,17 @@
 /**
-
-MAIN CLASS UseCase5Palindrome CheckerApp
-Use Case 5: Stack Based Palindrome Checker
+MAIN CLASS - UseCase6Palindrome Checker App
+Use Case 6: Queue Stack Fairness Check
 Description:
-This class validates a palindrome using a Stack
-*data structure which follows the LIFO principle.
- At this stage, the application:
-Pushes characters into a stack
-Pops them in reverse order
-Compares with original sequence
-Displays the result
-This maps stack behavior to reversal logic.
+This class demonstrates palindrome validation using
+        two different data structures:
+Queue (FIFO First In First Out)
+- Stack (LIFO Last In First Out)
+Characters are inserted into both structures and then compared by removing from the front of the queue and the top of the stack.
+If all characters match, the input string is confirmed as a palindrome.
+This use case helps understand how FIFO and LIFO behaviors can be combined for symmetric comparison.
 @author PranavSRM
-@version 5.0
-
- **/
+@version 6.0
+**/
 import java .util.*;
 public class PalindromeCheckerApp {
     /**
@@ -23,32 +20,39 @@ public class PalindromeCheckerApp {
      */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter a string: ");
+        System.out.print("Enter a string to check: ");
         String input = scanner.nextLine();
 
-        // Standardize input (optional but recommended for mixed-case)
-        String standardizedInput = input.toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
+        if (isPalindrome(input)) {
+            System.out.println("\"" + input + "\" is a palindrome.");
+        } else {
+            System.out.println("\"" + input + "\" is NOT a palindrome.");
+        }
+        scanner.close();
+    }
+
+    public static boolean isPalindrome(String str) {
+        // Normalize: lowercase and remove non-alphanumeric characters
+        String cleanStr = str.toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
 
         Stack<Character> stack = new Stack<>();
+        Queue<Character> queue = new LinkedList<>();
 
-        // Step 1: Push characters into stack
-        for (int i = 0; i < standardizedInput.length(); i++) {
-            stack.push(standardizedInput.charAt(i));
+        // 1. Enqueue and Push characters
+        for (int i = 0; i < cleanStr.length(); i++) {
+            char c = cleanStr.charAt(i);
+            stack.push(c);  // LIFO
+            queue.add(c);   // FIFO
         }
 
-        // Step 2: Pop and build reversed string
-        StringBuilder reversedInput = new StringBuilder();
-        while (!stack.isEmpty()) {
-            reversedInput.append(stack.pop());
+        // 2. Compare dequeue vs pop
+        while (!queue.isEmpty()) {
+            // Dequeue removes first char, Pop removes last char added
+            if (!queue.remove().equals(stack.pop())) {
+                return false; // Mismatch found
+            }
         }
 
-        // Step 3: Print result
-        if (standardizedInput.equals(reversedInput.toString())) {
-            System.out.println("Result: '" + input + "' is a palindrome.");
-        } else {
-            System.out.println("Result: '" + input + "' is not a palindrome.");
-        }
-
-        scanner.close();
+        return true; // All characters matched
     }
 }
