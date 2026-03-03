@@ -1,55 +1,73 @@
 /**
- MAIN CLASS Use Case 10 - PalindromeCheckerApp
- Use Case 10: Normalized Palindrome Validation
+ MAIN CLASS Use Case 11 - PalindromeCheckerApp
+ Use Case 11: Object Oriented Palindrome Service
+
  Description:
- This class validates a palindrome after preprocessing
- the input string.
-
- Normalization includes:
- - Removing spaces and symbols
- - Converting to lowercase
-
- This ensures the palindrome check is logical rather
- than character-format dependent.
- hh
- Example:
- "A man a plan a canal Panama"
+ This class demonstrates palindrome validation using object-oriented design.
+ The palindrome logic is encapsulated inside a PalindromeService class.
+ This improves:
+ -Reusability
+ -Readability
+ -Separation of concerns
 
  @author PranavSRM
  @version 10.0
  **/
-import java .util.*;
+import java.util.*;
 public class PalindromeCheckerApp {
     /**
      * Application entry point for UC3.
      *
      * @param args Command-line arguments
      */
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("--- Palindrome Checker App ---");
-        System.out.print("Enter a string to check: ");
-        String input = scanner.nextLine();
 
-        if (isPalindrome(input)) {
-            System.out.println("Result: It's a palindrome!");
-        } else {
-            System.out.println("Result: Not a palindrome.");
+    // 1. Create PalindromeChecker class (Encapsulation)
+    public static class PalindromeChecker {
+        /**
+         * UC 11: using encapsulation to split and check
+         */
+
+        // 2. Expose checkPalindrome() method
+        public boolean checkPalindrome(String text) {
+            if (text == null || text.trim().isEmpty()) return false;
+
+            // Internal Data Structure: Stack (as per UC11 requirements)
+            Stack<Character> stack = new Stack<>();
+
+            // Clean the string: remove non-alphanumeric and make lowercase
+            String clean = text.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+
+            // Push all characters onto the stack
+            for (char c : clean.toCharArray()) {
+                stack.push(c);
+            }
+
+            // Build the reversed string by popping from the stack
+            StringBuilder reversed = new StringBuilder();
+            while (!stack.isEmpty()) {
+                reversed.append(stack.pop());
+            }
+
+            // Single Responsibility Principle: Logic is isolated here
+            return clean.equals(reversed.toString());
         }
     }
 
-    /**
-     * UC 10: Case-Insensitive & Space-Ignored Palindrome
-     *Goal: Ignore spaces and case while checking a palindrome.
-     */
+    // Console-based Driver
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        PalindromeChecker checker = new PalindromeChecker();
 
-    public static boolean isPalindrome(String s) {
-        // Step 1: Normalize string (Ignore spaces and case using Regex)
-        String normalized = s.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        System.out.println("--- Palindrome Checker App ---");
+        System.out.print("Enter text: ");
+        String input = scanner.nextLine();
 
-        // Step 2: Apply palindrome logic (Reverse and compare)
-        String reversed = new StringBuilder(normalized).reverse().toString();
+        if (checker.checkPalindrome(input)) {
+            System.out.println("Result: It is a palindrome.");
+        } else {
+            System.out.println("Result: Not a palindrome.");
+        }
 
-        return normalized.equals(reversed);
+        scanner.close();
     }
 }
